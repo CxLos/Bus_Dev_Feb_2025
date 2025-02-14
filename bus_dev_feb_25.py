@@ -95,7 +95,7 @@ df['Total travel time (minutes):'] = df['Total travel time (minutes):'].fillna(0
 
 # Sum 'Total travel time (minutes):' dataframe
 total_travel_time = df['Total travel time (minutes):'].sum()
-# total_travel_time = round(total_travel_time)
+total_travel_time = round(total_travel_time)
 # print(total_travel_time)
 
 # travel time value counts

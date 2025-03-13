@@ -139,7 +139,7 @@ print('Total Grants Searched:', df_grants_searched)
 df_grants_applied = df['Number of Grants Applied:'].sum()
 print('Total Grants Applied:', df_grants_applied)
 
-# =========== Total Other Funding Opportunitites Searvhed ============ #
+# =========== Total Other Funding Opportunitites Searched ============ #
 
 df_funding_searched = df['Number of Other Funding Opportunities Searched:'].sum()
 print("Total Funding Sea", df_funding_searched)
@@ -535,7 +535,7 @@ app.layout = html.Div(
                     className='graph11',
                     children=[
                         html.Div(className='high1', 
-                                 children=['Total Developments:']),
+                                 children=['Total Developments']),
                         html.Div(
                             className='circle1',
                             children=[
@@ -551,13 +551,52 @@ app.layout = html.Div(
                 html.Div(
                     className='graph22',
                     children=[
-                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(className='high3', children=['Development Hours']),
                         html.Div(
                             className='circle2',
                             children=[
                                 html.Div(
                                     className='hilite',
                                     children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row2',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Existing Partner Meetings']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[df_existing_partner_meetings])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['New Partner Meetings']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', 
+                                                      children=[df_new_partner_meetings])]
                                 )
                             ]
                         ) 
@@ -573,14 +612,14 @@ app.layout = html.Div(
                     className='graph11',
                     children=[
                         html.Div(className='high1', 
-                                 children=['Total Developments:']),
+                                 children=['New Partners']),
                         html.Div(
                             className='circle1',
                             children=[
                                 html.Div(
                                     className='hilite',
                                     children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
+                                                      children=[df_new_partners])]
                                 )
                             ]
                         )
@@ -589,13 +628,51 @@ app.layout = html.Div(
                 html.Div(
                     className='graph22',
                     children=[
-                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(className='high3', children=['Blank']),
                         html.Div(
                             className='circle2',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                    children=[html.H1(className='high4', children=[])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row2',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Outreach Calls']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[df_outreach_calls])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Outreach Emails']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[df_outreach_emails])]
                                 )
                             ]
                         ) 
@@ -611,14 +688,14 @@ app.layout = html.Div(
                     className='graph11',
                     children=[
                         html.Div(className='high1', 
-                                 children=['Total Developments:']),
+                                 children=['Grants Searched']),
                         html.Div(
                             className='circle1',
                             children=[
                                 html.Div(
                                     className='hilite',
                                     children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
+                                                      children=[df_grants_searched])]
                                 )
                             ]
                         )
@@ -627,13 +704,51 @@ app.layout = html.Div(
                 html.Div(
                     className='graph22',
                     children=[
-                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(className='high3', children=['Grants Applied']),
                         html.Div(
                             className='circle2',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                    children=[html.H1(className='high4', children=[df_grants_applied])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row2',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Funding Opportunities Searched']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[df_funding_searched])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Funding Opportunitites Applied']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[df_funding_applied])]
                                 )
                             ]
                         ) 
@@ -649,14 +764,14 @@ app.layout = html.Div(
                     className='graph11',
                     children=[
                         html.Div(className='high1', 
-                                 children=['Total Developments:']),
+                                 children=['Commuminity Events Attended']),
                         html.Div(
                             className='circle1',
                             children=[
                                 html.Div(
                                     className='hilite',
                                     children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
+                                                      children=[df_community_events])]
                                 )
                             ]
                         )
@@ -665,13 +780,13 @@ app.layout = html.Div(
                 html.Div(
                     className='graph22',
                     children=[
-                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(className='high3', children=['CRM Updates']),
                         html.Div(
                             className='circle2',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                    children=[html.H1(className='high4', children=[df_crm_updates])]
                                 )
                             ]
                         ) 
@@ -681,121 +796,7 @@ app.layout = html.Div(
         ),
 
         html.Div(
-            className='row1',
-            children=[
-                html.Div(
-                    className='graph11',
-                    children=[
-                        html.Div(className='high1', 
-                                 children=['Total Developments:']),
-                        html.Div(
-                            className='circle1',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
-                                )
-                            ]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph22',
-                    children=[
-                        html.Div(className='high3', children=['Development Hours:']),
-                        html.Div(
-                            className='circle2',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
-                                )
-                            ]
-                        ) 
-                    ]
-                )
-            ]
-        ),
-
-        html.Div(
-            className='row1',
-            children=[
-                html.Div(
-                    className='graph11',
-                    children=[
-                        html.Div(className='high1', 
-                                 children=['Total Developments:']),
-                        html.Div(
-                            className='circle1',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
-                                )
-                            ]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph22',
-                    children=[
-                        html.Div(className='high3', children=['Development Hours:']),
-                        html.Div(
-                            className='circle2',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
-                                )
-                            ]
-                        ) 
-                    ]
-                )
-            ]
-        ),
-
-        html.Div(
-            className='row1',
-            children=[
-                html.Div(
-                    className='graph11',
-                    children=[
-                        html.Div(className='high1', 
-                                 children=['Total Developments:']),
-                        html.Div(
-                            className='circle1',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high2', 
-                                                      children=[total_developments])]
-                                )
-                            ]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph22',
-                    children=[
-                        html.Div(className='high3', children=['Development Hours:']),
-                        html.Div(
-                            className='circle2',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high4', children=[dev_hours])]
-                                )
-                            ]
-                        ) 
-                    ]
-                )
-            ]
-        ),
-
-        html.Div(
-            className='row3',
+            className='row2',
             children=[
                 html.Div(
                     className='graph1',

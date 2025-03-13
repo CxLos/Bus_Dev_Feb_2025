@@ -44,7 +44,7 @@ df = df[df['Date of Activity'].dt.month == 2]
 
 # print(df.head(10))
 # print('Total Marketing Events: ', len(df))
-# print('Column Names: \n', df.columns)
+print('Column Names: \n', df.columns.to_list())
 # print('DF Shape:', df.shape)
 # print('Dtypes: \n', df.dtypes)
 # print('Info:', df.info())
@@ -56,7 +56,26 @@ df = df[df['Date of Activity'].dt.month == 2]
 
 # ================================= Columns ================================= #
 
-# Column Names: 
+Columns = [
+    'Timestamp', 
+    'Date of Activity', 
+    'Activity Status:', 
+    'Person submitting this form:', 
+    'Activity duration (minutes):',
+    'Purpose of the activity (please only list one):', 
+    'Brief activity description:', 
+    'Select Activity:', 
+    'Number of Existing Partner Meetings:', 
+    'Number of New Partnership Meetings:',
+    'Number of New Partners:', 
+    'Number of Outreach Calls:',
+    'Number of Outreach Emails:', 'Number of Grants Searched:',
+    'Number of Grants Applied:', 
+    'Number of Other Funding Opportunities Searched:', 
+    'Number of Other Funding Opportunities Applied:',
+    'Number of Community Events Attended:', 
+    'Number of CRM Updates:'
+    ] 
 
 
 
@@ -73,8 +92,6 @@ df = df[df['Date of Activity'].dt.month == 2]
 # if duplicate_columns:
 #     print(f"Duplicate columns found: {duplicate_columns}")
 
-
-
 # ========================= Total Developments ========================== #
 
 # Total number of engagements:
@@ -83,326 +100,23 @@ total_developments = len(df)
 # -------------------------- Development Hours -------------------------- #
 
 # Sum of 'Activity Duration (minutes):' dataframe converted to hours:
-dev_hours = df['Activity Duration (minutes):'].sum()/60
+dev_hours = df['Activity duration (minutes):'].sum()/60
 dev_hours = round(dev_hours)
-
-# -------------------------- Total Travel Time ------------------------ #
-
-# Clean the 'Total travel time (minutes):' column
-df['Total travel time (minutes):'] = df['Total travel time (minutes):'].replace('Sustainable Food Center + APH Health Education Strategy Meeting & Planning Activities', np.nan)
-df['Total travel time (minutes):'] = pd.to_numeric(df['Total travel time (minutes):'], errors='coerce') 
-df['Total travel time (minutes):'] = df['Total travel time (minutes):'].fillna(0)  # Fill NaN with 0
-
-# Sum 'Total travel time (minutes):' dataframe
-total_travel_time = df['Total travel time (minutes):'].sum()
-total_travel_time = round(total_travel_time)
-# print(total_travel_time)
-
-# travel time value counts
-# print(df['Total travel time (minutes):'].value_counts())
-
-# ---------------------------- Activity Status ----------------------- #
-
-# Group by 'Activity Status:' dataframe
-activity_status_group = df.groupby('Activity Status:').size().reset_index(name='Count')
-
-# Support Pie Chart
-status_pie = px.pie(
-    activity_status_group,
-    names='Activity Status:',
-    values='Count',
-).update_layout(
-    title='Activity Status Pie Chart',
-    height=450,
-    title_x=0.5,
-    font=dict(
-        family='Calibri',
-        size=17,
-        color='black'
-    )
-).update_traces(
-    rotation=0,
-    textinfo='value+percent',
-    hovertemplate='<b>%{label}</b>: %{value}<extra></extra>'
-)
-
-# ----------------------------- Admin Activity --------------------------- #
-
-# Group by 'BMHC Administrative Activity:' dataframe:
-admin_activity = df.groupby('BMHC Administrative Activity:').size().reset_index(name='Count')
-# print("Admin Activities: \n", admin_activity.value_counts())
-
-admin_bar=px.bar(
-    admin_activity,
-    x="BMHC Administrative Activity:",
-    y='Count',
-    color="BMHC Administrative Activity:",
-    text='Count',
-).update_layout(
-    height=850, 
-    width=1900,
-    title=dict(
-        text='Admin Activity Bar Chart',
-        x=0.5, 
-        font=dict(
-            size=25,
-            family='Calibri',
-            color='black',
-            )
-    ),
-    font=dict(
-        family='Calibri',
-        size=18,
-        color='black'
-    ),
-    xaxis=dict(
-        tickangle=-20,  # Rotate x-axis labels for better readability
-        tickfont=dict(size=18),  # Adjust font size for the tick labels
-        title=dict(
-            # text=None,
-            text="Admin Activity",
-            font=dict(size=20),  # Font size for the title
-        ),
-        showticklabels=False
-    ),
-    yaxis=dict(
-        title=dict(
-            text='Count',
-            font=dict(size=20),  # Font size for the title
-        ),
-    ),
-    legend=dict(
-        title='',
-        orientation="v",  # Vertical legend
-        x=1.05,  # Position legend to the right
-        y=1,  # Position legend at the top
-        xanchor="left",  # Anchor legend to the left
-        yanchor="top",  # Anchor legend to the top
-        visible=True
-        # visible=False
-    ),
-    hovermode='closest', # Display only one hover label per trace
-    bargap=0.08,  # Reduce the space between bars
-    bargroupgap=0,  # Reduce space between individual bars in groups
-).update_traces(
-    textposition='auto',
-    hovertemplate='<b></b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
-)
-
-# Insurance Status Pie Chart
-admin_pie=px.pie(
-    admin_activity,
-    names="BMHC Administrative Activity:",
-    values='Count'
-).update_layout(
-    height=850,
-    width=1700,
-    # showlegend=False,
-    showlegend=True,
-    title='Admin Activity Pie Chart',
-    title_x=0.5,
-    font=dict(
-        family='Calibri',
-        size=17,
-        color='black'
-    )
-).update_traces(
-    textinfo='percent',
-    # textinfo='none',
-    hovertemplate='<b>%{label}</b>: %{value}<extra></extra>'
-)
-
-# -------------------------- Care Network Activity ----------------------- #
-
-# Group by 'Care Network Activity:' dataframe:
-care_network_activity = df.groupby('Care Network Activity:').size().reset_index(name='Count')
-
-# print("Care Netowrk Activities: \n", care_network_activity.value_counts())
-
-care_bar=px.bar(
-    care_network_activity,
-    x="Care Network Activity:",
-    y='Count',
-    color="Care Network Activity:",
-    text='Count',
-).update_layout(
-    height=850, 
-    width=1800,
-    title=dict(
-        text='Care Network Activity Bar Chart',
-        x=0.5, 
-        font=dict(
-            size=25,
-            family='Calibri',
-            color='black',
-            )
-    ),
-    font=dict(
-        family='Calibri',
-        size=18,
-        color='black'
-    ),
-    xaxis=dict(
-        tickangle=-20,  # Rotate x-axis labels for better readability
-        tickfont=dict(size=18),  # Adjust font size for the tick labels
-        title=dict(
-            # text=None,
-            text="Care Network Activity",
-            font=dict(size=20),  # Font size for the title
-        ),
-    ),
-    yaxis=dict(
-        title=dict(
-            text='Count',
-            font=dict(size=20),  # Font size for the title
-        ),
-    ),
-    legend=dict(
-        title='',
-        orientation="v",  # Vertical legend
-        x=1.05,  # Position legend to the right
-        y=1,  # Position legend at the top
-        xanchor="left",  # Anchor legend to the left
-        yanchor="top",  # Anchor legend to the top
-        visible=False
-    ),
-    hovermode='closest', # Display only one hover label per trace
-    bargap=0.08,  # Reduce the space between bars
-    bargroupgap=0,  # Reduce space between individual bars in groups
-).update_traces(
-    textposition='auto',
-    hovertemplate='<b></b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
-)
-
-# Insurance Status Pie Chart
-care_pie=px.pie(
-    care_network_activity,
-    names="Care Network Activity:",
-    values='Count'
-).update_layout(
-    height=850,
-    width=1700,
-    # showlegend=False,
-    title='Care Network Activity Pie Chart',
-    title_x=0.5,
-    font=dict(
-        family='Calibri',
-        size=17,
-        color='black'
-    )
-).update_traces(
-    textinfo='value+percent',
-    # textinfo='none',
-    hovertemplate='<b>%{label}</b>: %{value}<extra></extra>'
-)
-
-# --------------------------Community Outreach Activity ---------------------- #
-
-# Replace values in the original DataFrame before grouping
-df['Community Outreach Activity:'] = df['Community Outreach Activity:'].replace(
-    {"Movement is medicine": "Movement is Medicine"}
-)
-
-# Group by 'Community Outreach Activity:' dataframe
-community_outreach_activity = df.groupby('Community Outreach Activity:').size().reset_index(name='Count')
-
-# print(community_outreach_activity.value_counts())
-
-community_bar=px.bar(
-    community_outreach_activity,
-    x="Community Outreach Activity:",
-    y='Count',
-    color="Community Outreach Activity:",
-    text='Count',
-).update_layout(
-    height=450, 
-    width=780,
-    title=dict(
-        text='Community Outreach Activity Bar Chart',
-        x=0.5, 
-        font=dict(
-            size=25,
-            family='Calibri',
-            color='black',
-            )
-    ),
-    font=dict(
-        family='Calibri',
-        size=18,
-        color='black'
-    ),
-    xaxis=dict(
-        tickangle=-20,  # Rotate x-axis labels for better readability
-        tickfont=dict(size=18),  # Adjust font size for the tick labels
-        title=dict(
-            # text=None,
-            text="Community Outreach Activity",
-            font=dict(size=20),  # Font size for the title
-        ),
-    ),
-    yaxis=dict(
-        title=dict(
-            text="Count",
-            font=dict(size=20),  # Font size for the title
-        ),
-    ),
-    legend=dict(
-        title="",
-        orientation="v",  # Vertical legend
-        x=1.05,  # Position legend to the right
-        y=1,  # Position legend at the top
-        xanchor="left",  # Anchor legend to the left
-        yanchor="top",  # Anchor legend to the top
-        visible=False
-    ),
-    hovermode='closest', # Display only one hover label per trace
-    bargap=0.08,  # Reduce the space between bars
-    bargroupgap=0,  # Reduce space between individual bars in groups
-).update_traces(
-    textangle=0,
-    textposition='auto',
-    hovertemplate='<b></b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
-)
-
-# Insurance Status Pie Chart
-community_pie=px.pie(
-    community_outreach_activity,
-    names="Community Outreach Activity:",
-    values='Count'
-).update_layout(
-    title='Community Outreach Activity Pie Chart',
-    title_x=0.5,
-    font=dict(
-        family='Calibri',
-        size=17,
-        color='black'
-    )
-).update_traces(
-    textinfo='value+percent',
-    hovertemplate='<b>%{label}</b>: %{value}<extra></extra>'
-)
 
 # ------------------------ Person Submitting Form -------------------- #
 
-#  Duplicate values in 'Person submitting this form:' column:
+#  Unique values:
 
-# 0           Antonio Montggery       1
-# 1           Antonio Montgomery      1
-# 2              Cameron Morgan       1
-# 3             Kiounis Williams      6
-# 4            Kiounis Williams       3
-# 5             Larry Wallace Jr     31
 
-df['Person submitting this form:'] = (
-    df['Person submitting this form:']
-    .str.strip()
-    .replace(
-        {"Larry Wallace Jr": "Larry Wallace Jr.", 
-        "Antonio Montggery": "Antonio Montgomery"}
-    )
-)
 
-# df['Person submitting this form:'] = df['Person submitting this form:'].replace("Kiounis Williams ", "Kiounis Williams")
+# df['Person submitting this form:'] = (
+#     df['Person submitting this form:']
+#     .str.strip()
+#     .replace(
+#         {"Larry Wallace Jr": "Larry Wallace Jr.", 
+#         "Antonio Montggery": "Antonio Montgomery"}
+#     )
+# )
 
 df_person = df.groupby('Person submitting this form:').size().reset_index(name='Count')
 # print(person_group.value_counts())
@@ -489,7 +203,7 @@ person_pie=px.pie(
 # # ========================== DataFrame Table ========================== #
 
 # Engagement Table
-engagement_table = go.Figure(data=[go.Table(
+dev_table = go.Figure(data=[go.Table(
     # columnwidth=[50, 50, 50],  # Adjust the width of the columns
     header=dict(
         values=list(df.columns),
@@ -509,41 +223,12 @@ engagement_table = go.Figure(data=[go.Table(
     )
 )])
 
-engagement_table.update_layout(
+dev_table.update_layout(
     margin=dict(l=50, r=50, t=30, b=40),  # Remove margins
     height=700,
     # width=1500,  # Set a smaller width to make columns thinner
     paper_bgcolor='rgba(0,0,0,0)',  # Transparent background
     plot_bgcolor='rgba(0,0,0,0)'  # Transparent plot area
-)
-
-# Group by 'Entity name:' dataframe
-entity_name_group = df.groupby('Entity name:').size().reset_index(name='Count')
-
-# Entity Name Table
-entity_name_table = go.Figure(data=[go.Table(
-    header=dict(
-        values=list(entity_name_group.columns),
-        fill_color='paleturquoise',
-        align='center',
-        height=30,
-        font=dict(size=12)
-    ),
-    cells=dict(
-        values=[entity_name_group[col] for col in entity_name_group.columns],
-        fill_color='lavender',
-        align='left',
-        height=25,
-        font=dict(size=12)
-    )
-)])
-
-entity_name_table.update_layout(
-    margin=dict(l=50, r=50, t=30, b=40),
-    height=400,
-    width=780,
-    paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)'
 )
 
 # ============================== Dash Application ========================== #
@@ -560,14 +245,14 @@ app.layout = html.Div(
         html.Div(
             className='divv', 
             children=[ 
-                html.H1('Partner Engagement Report', className='title'),
-                html.H1('January 2025', className='title2'),
+                html.H1('Business Development Report', className='title'),
+                html.H1('February 2025', className='title2'),
                 html.Div(
                     className='btn-box', 
                     children=[
                         html.A(
                             'Repo',
-                            href='https://github.com/CxLos/Eng_Jan_2025',
+                            href='https://github.com/CxLos/Bus_Dev_Feb_2025',
                             className='btn'
                         )
                     ]
@@ -584,7 +269,7 @@ app.layout = html.Div(
                     children=[
                         html.H1(
                             className='table-title',
-                            children='Engagement Data Table'
+                            children='Business Development Data Table'
                         )
                     ]
                 ),
@@ -593,7 +278,7 @@ app.layout = html.Div(
                     children=[
                         dcc.Graph(
                             className='data',
-                            figure=engagement_table
+                            figure=dev_table
                         )
                     ]
                 )
@@ -607,13 +292,13 @@ app.layout = html.Div(
                 html.Div(
                     className='graph11',
                     children=[
-                        html.Div(className='high1', children=['Total Engagements:']),
+                        html.Div(className='high1', children=['Total Developments:']),
                         html.Div(
                             className='circle1',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high2', children=[total_engagements])]
+                                    children=[html.H1(className='high2', children=[total_developments])]
                                 )
                             ]
                         )
@@ -622,13 +307,13 @@ app.layout = html.Div(
                 html.Div(
                     className='graph22',
                     children=[
-                        html.Div(className='high3', children=['Engagement Hours:']),
+                        html.Div(className='high3', children=['Development Hours:']),
                         html.Div(
                             className='circle2',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high4', children=[engagement_hours])]
+                                    children=[html.H1(className='high4', children=[dev_hours])]
                                 )
                             ]
                         ) 
@@ -636,136 +321,6 @@ app.layout = html.Div(
                 )
             ]
         ),
-
-        # Row 1: Engagements and Hours
-        html.Div(
-            className='row1',
-            children=[
-                html.Div(
-                    className='graph111',
-                    children=[
-                        html.Div(className='high1', children=['Total Travel Time']),
-                        html.Div(
-                            className='circle1',
-                            children=[
-                                html.Div(
-                                    className='hilite',
-                                    children=[html.H1(className='high2', children=[total_travel_time])]
-                                )   
-                            ]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph2',
-                    children=[
-                        dcc.Graph(
-                            figure=status_pie
-                        )
-                    ]
-                )
-            ]
-        ),
-
-        # html.Div(
-        #     className='row3',
-        #     children=[
-        #         html.Div(
-        #             className='graph1',
-        #             children=[
-        #                 dcc.Graph(
-        #                     figure=admin_bar
-        #                 )
-        #             ]
-        #         ),
-        #         html.Div(
-        #             className='graph2',
-        #             children=[
-        #                 dcc.Graph(
-        #                     figure=admin_pie
-        #                 )
-        #             ]
-        #         )
-        #     ]
-        # ),   
-        
-        html.Div(
-            className='row3',
-            children=[
-                html.Div(
-                    className='graph33',
-                    children=[
-                        dcc.Graph(
-                            figure=admin_bar
-                        )
-                    ]
-                ),
-            ]
-        ),   
-        
-        html.Div(
-            className='row3',
-            children=[
-                html.Div(
-                    className='graph33',
-                    children=[
-                        dcc.Graph(
-                            figure=admin_pie
-                        )
-                    ]
-                ),
-            ]
-        ),   
-
-        html.Div(
-            className='row3',
-            children=[
-                html.Div(
-                    className='graph33',
-                    children=[
-                        dcc.Graph(
-                            figure=care_bar
-                        )
-                    ]
-                ),
-            ]
-        ),   
-
-        html.Div(
-            className='row3',
-            children=[
-                html.Div(
-                    className='graph33',
-                    children=[
-                        dcc.Graph(
-                            figure=care_pie
-                        )
-                    ]
-                ),
-            ]
-        ),   
-
-        html.Div(
-            className='row3',
-            children=[
-                html.Div(
-                    className='graph1',
-                    children=[
-                        dcc.Graph(
-                            figure=community_bar
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph2',
-                    children=[
-                        dcc.Graph(
-                            figure=community_pie
-                        )
-                    ]
-                )
-            ]
-        ),   
 
         html.Div(
             className='row3',
@@ -788,59 +343,6 @@ app.layout = html.Div(
                 )
             ]
         ),   
-        
-# ROW 2
-html.Div(
-    className='row2',
-    children=[
-        html.Div(
-            className='graph3',
-            children=[
-                html.Div(
-                    className='table',
-                    children=[
-                        html.H1(
-                            className='table-title',
-                            children='Entity Name Table'
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='table2', 
-                    children=[
-                        dcc.Graph(
-                            className='data',
-                            figure=entity_name_table
-                        )
-                    ]
-                )
-            ]
-        ),
-        html.Div(
-            className='graph4',
-            children=[                
-              html.Div(
-                    className='table',
-                    children=[
-                        html.H1(
-                            className='table-title',
-                            children=''
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='table2', 
-                    children=[
-                        dcc.Graph(
-                            
-                        )
-                    ]
-                )
-   
-            ]
-        )
-    ]
-),
 ])
 
 print(f"Serving Flask app '{current_file}'! 🚀")
@@ -850,7 +352,7 @@ if __name__ == '__main__':
                 #    False)
 # =================================== Updated Database ================================= #
 
-# updated_path = 'data/bmhc_q4_2024_cleaned.xlsx'
+# updated_path = 'data/bus_dev_feb_2025.xlsx'
 # data_path = os.path.join(script_dir, updated_path)
 # df.to_excel(data_path, index=False)
 # print(f"DataFrame saved to {data_path}")

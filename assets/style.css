@@ -243,7 +243,7 @@
   /* height: 100%; */
   position: relative; /* Ensure positioning context */
   margin: 0px;
-  padding: 10px 20px 50px 0px;
+  padding: 10px 10px 50px 0px;
   border-right: 2px solid rgb(186, 186, 186);
   border-bottom: 2px solid rgb(186, 186, 186);
   border-top: 2px solid rgb(186, 186, 186);
@@ -327,7 +327,7 @@
 .high2 {
   font-size: 70px;
   margin: 0px 0px 0px 0px;
-  padding: 10px 13px 10px 13px;
+  padding: 10px 16px 10px 16px;
   display: flex; /* Use flexbox for alignment */
   justify-content: center; /* Horizontal centering */
   align-items: center; /* Vertical centering */
@@ -352,7 +352,7 @@
 .high4 {
   font-size: 70px;
   margin: 0px 0px 0px 0px;
-  padding: 25px 13px 25px 13px;
+  padding: 10px 15px 10px 15px;
   display: flex; /* Use flexbox for alignment */
   justify-content: center; /* Horizontal centering */
   align-items: center; /* Vertical centering */

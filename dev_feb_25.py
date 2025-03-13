@@ -59,7 +59,7 @@ print('Column Names: \n', df.columns.to_list())
 Columns = [
     'Timestamp', 
     'Date of Activity', 
-    'Activity Status:', 
+    'Activity Status', 
     'Person submitting this form:', 
     'Activity duration (minutes):',
     'Purpose of the activity (please only list one):', 
@@ -69,7 +69,8 @@ Columns = [
     'Number of New Partnership Meetings:',
     'Number of New Partners:', 
     'Number of Outreach Calls:',
-    'Number of Outreach Emails:', 'Number of Grants Searched:',
+    'Number of Outreach Emails:', 
+    'Number of Grants Searched:',
     'Number of Grants Applied:', 
     'Number of Other Funding Opportunities Searched:', 
     'Number of Other Funding Opportunities Applied:',
@@ -102,6 +103,248 @@ total_developments = len(df)
 # Sum of 'Activity Duration (minutes):' dataframe converted to hours:
 dev_hours = df['Activity duration (minutes):'].sum()/60
 dev_hours = round(dev_hours)
+
+# =================== Total Existing Partner Meetings =================== #
+
+df_existing_partner_meetings = df['Number of Existing Partner Meetings:'].sum()
+print('Total Existing Partner Meetings:', df_existing_partner_meetings)
+
+# =================== Total New Partner Meetings =================== #
+
+df_new_partner_meetings = df['Number of New Partnership Meetings:'].sum()
+print('Total New Partner Meetings:', df_new_partner_meetings)
+
+# =================== Total Number of New Partners =================== #
+
+df_new_partners = df['Number of New Partners:'].sum()
+print('Total New Partners:', df_new_partners)
+
+# =================== Total Outreach Calls =================== #
+
+df_outreach_calls = df['Number of Outreach Calls:'].sum()
+print('Total Outreach Calls:', df_outreach_calls)
+
+# =================== Total Outreach Emails =================== #
+
+df_outreach_emails = df['Number of Outreach Emails:'].sum()
+print('Total Outreach Emails:', df_outreach_emails)
+
+# =================== Total Grants Searched =================== #
+
+df_grants_searched = df['Number of Grants Searched:'].sum()
+print('Total Grants Searched:', df_grants_searched)
+
+# =================== Total Grants Applied =================== #
+
+df_grants_applied = df['Number of Grants Applied:'].sum()
+print('Total Grants Applied:', df_grants_applied)
+
+# =========== Total Other Funding Opportunitites Searvhed ============ #
+
+df_funding_searched = df['Number of Other Funding Opportunities Searched:'].sum()
+print("Total Funding Sea", df_funding_searched)
+
+# =========== Total Other Funding Opportunities Applied ============ #
+
+df_funding_applied = df['Number of Other Funding Opportunities Applied:'].sum()
+print("Total Funding Applied", df_funding_applied)
+
+# =================== Total Community Events Attended =================== #
+
+df_community_events = df['Number of Community Events Attended:'].sum()
+print('Total Community Events Attended:', df_community_events)
+
+# =================== Total CRM Updates =================== #
+
+df_crm_updates = df['Number of CRM Updates:'].sum()
+print('Total CRM Updates:', df_crm_updates)
+
+# --------------------- Activity Status --------------------- #
+
+# "Activity Status" dataframe:
+df_activity_status = df.groupby('Activity Status').size().reset_index(name='Count')
+
+status_bar=px.bar(
+    df_activity_status,
+    x='Activity Status',
+    y='Count',
+    color='Activity Status',
+    text='Count',
+).update_layout(
+    height=460, 
+    width=780,
+    title=dict(
+        text='Activity Status',
+        x=0.5, 
+        font=dict(
+            size=25,
+            family='Calibri',
+            color='black',
+            )
+    ),
+    font=dict(
+        family='Calibri',
+        size=18,
+        color='black'
+    ),
+    xaxis=dict(
+        tickangle=0,  # Rotate x-axis labels for better readability
+        tickfont=dict(size=18),  # Adjust font size for the tick labels
+        title=dict(
+            # text=None,
+            text="Status",
+            font=dict(size=20),  # Font size for the title
+        ),
+        # showticklabels=False  # Hide x-tick labels
+        showticklabels=True  # Hide x-tick labels
+    ),
+    yaxis=dict(
+        title=dict(
+            text='Count',
+            font=dict(size=20),  # Font size for the title
+        ),
+    ),
+    legend=dict(
+        # title='Support',
+        title_text='',
+        orientation="v",  # Vertical legend
+        x=1.05,  # Position legend to the right
+        y=1,  # Position legend at the top
+        xanchor="left",  # Anchor legend to the left
+        yanchor="top",  # Anchor legend to the top
+        # visible=False
+        visible=True
+    ),
+    hovermode='closest', # Display only one hover label per trace
+    bargap=0.08,  # Reduce the space between bars
+    bargroupgap=0,  # Reduce space between individual bars in groups
+).update_traces(
+    textposition='auto',
+    hovertemplate='<b>Status:</b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
+)
+
+# Person Pie Chart
+status_pie=px.pie(
+    df_activity_status,
+    names="Activity Status",
+    values='Count'  # Specify the values parameter
+).update_layout(
+    title='Activity Status',
+    title_x=0.5,
+    font=dict(
+        family='Calibri',
+        size=17,
+        color='black'
+    )
+).update_traces(
+    rotation=0,
+    textposition='auto',
+    textinfo='value+percent',
+    hovertemplate='<b>%{label} Status</b>: %{value}<extra></extra>',
+)
+
+# ========================= Select Activity ========================== #
+
+# Unique values:
+# print(df['Select Activity:'].unique())
+
+# Replace values in 'Select Activity:' column
+df['Select Activity:'] = (
+    df['Select Activity:']
+    .str.strip()
+    .replace(
+        {"Outreach": "Outreach", 
+        "Partnership": "Partnership", 
+        "Grants": "Grants",
+        "Funding": "Funding",
+        "Community": "Community",
+        "CRM": "CRM"}
+    )
+)
+
+# Group by 'Select Activity:' column
+df_activity = df.groupby('Select Activity:').size().reset_index(name='Count')
+
+# Bar Chart
+activity_bar=px.bar(
+    df_activity,
+    x='Select Activity:',
+    y='Count',
+    color='Select Activity:',
+    text='Count',
+).update_layout(
+    height=460,
+    width=780,
+    title=dict(
+        text='Activity Type',
+        x=0.5,
+        font=dict(
+
+            size=25,
+            family='Calibri',
+            color='black',
+            )
+    ),
+    font=dict(
+        family='Calibri',
+        size=18,
+        color='black'
+    ),
+    xaxis=dict(
+        tickangle=-15,  # Rotate x-axis labels for better readability
+        tickfont=dict(size=18),  # Adjust font size for the tick labels
+        title=dict(
+            # text=None,
+            text="Activity",
+            font=dict(size=20),  # Font size for the title
+        ),
+        showticklabels=False  # Hide x-tick labels
+        # showticklabels=True  # Hide x-tick labels
+    ),
+    yaxis=dict(
+        title=dict(
+            text='Count',
+            font=dict(size=20),  # Font size for the title
+        ),
+    ),
+    legend=dict(
+        # title='Support',
+        title_text='',  # Title of the legend   
+        orientation="v",  # Vertical legend
+        x=1.05,  # Position legend to the right
+        y=1,  # Position legend at the top
+        xanchor="left",  # Anchor legend to the left
+        yanchor="top",  # Anchor legend to the top
+        # visible=False
+        visible=True
+    ),
+    hovermode='closest', # Display only one hover label per trace
+    bargap=0.08,  # Reduce the space between bars
+    bargroupgap=0,  # Reduce space between individual bars in groups
+).update_traces(
+    textposition='auto',
+    hovertemplate='<b>Activity:</b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
+)
+
+# Activity Pie Chart
+activity_pie=px.pie(
+    df_activity,
+    names="Select Activity:",
+    values='Count'  # Specify the values parameter
+).update_layout(
+    title='Activity Type Distribution',
+    title_x=0.5,
+    font=dict(
+        family='Calibri',
+        size=17,
+        color='black'
+    )
+).update_traces(
+    rotation=0,
+    textposition='auto',
+    textinfo='value+percent',
+    hovertemplate='<b>%{label} Activity</b>: %{value}<extra></extra>',
+)
 
 # ------------------------ Person Submitting Form -------------------- #
 
@@ -152,8 +395,8 @@ person_bar=px.bar(
             text="Name",
             font=dict(size=20),  # Font size for the title
         ),
-        # showticklabels=False  # Hide x-tick labels
-        showticklabels=True  # Hide x-tick labels
+        showticklabels=False  # Hide x-tick labels
+        # showticklabels=True  # Hide x-tick labels
     ),
     yaxis=dict(
         title=dict(
@@ -176,7 +419,7 @@ person_bar=px.bar(
     bargap=0.08,  # Reduce the space between bars
     bargroupgap=0,  # Reduce space between individual bars in groups
 ).update_traces(
-    textposition='outside',
+    textposition='auto',
     hovertemplate='<b>Name:</b> %{label}<br><b>Count</b>: %{y}<extra></extra>'
 )
 
@@ -260,45 +503,46 @@ app.layout = html.Div(
             ]
         ),
         
-        # Data Table
-        html.Div(
-            className='row0',
-            children=[
-                html.Div(
-                    className='table',
-                    children=[
-                        html.H1(
-                            className='table-title',
-                            children='Business Development Data Table'
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='table2', 
-                    children=[
-                        dcc.Graph(
-                            className='data',
-                            figure=dev_table
-                        )
-                    ]
-                )
-            ]
-        ),
+        # # Data Table
+        # html.Div(
+        #     className='row0',
+        #     children=[
+        #         html.Div(
+        #             className='table',
+        #             children=[
+        #                 html.H1(
+        #                     className='table-title',
+        #                     children='Business Development Data Table'
+        #                 )
+        #             ]
+        #         ),
+        #         html.Div(
+        #             className='table2', 
+        #             children=[
+        #                 dcc.Graph(
+        #                     className='data',
+        #                     figure=dev_table
+        #                 )
+        #             ]
+        #         )
+        #     ]
+        # ),
 
-        # Row 1: Engagements and Hours
         html.Div(
             className='row1',
             children=[
                 html.Div(
                     className='graph11',
                     children=[
-                        html.Div(className='high1', children=['Total Developments:']),
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
                         html.Div(
                             className='circle1',
                             children=[
                                 html.Div(
                                     className='hilite',
-                                    children=[html.H1(className='high2', children=[total_developments])]
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
                                 )
                             ]
                         )
@@ -321,6 +565,278 @@ app.layout = html.Div(
                 )
             ]
         ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row1',
+            children=[
+                html.Div(
+                    className='graph11',
+                    children=[
+                        html.Div(className='high1', 
+                                 children=['Total Developments:']),
+                        html.Div(
+                            className='circle1',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high2', 
+                                                      children=[total_developments])]
+                                )
+                            ]
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph22',
+                    children=[
+                        html.Div(className='high3', children=['Development Hours:']),
+                        html.Div(
+                            className='circle2',
+                            children=[
+                                html.Div(
+                                    className='hilite',
+                                    children=[html.H1(className='high4', children=[dev_hours])]
+                                )
+                            ]
+                        ) 
+                    ]
+                )
+            ]
+        ),
+
+        html.Div(
+            className='row3',
+            children=[
+                html.Div(
+                    className='graph1',
+                    children=[
+                        dcc.Graph(
+                            figure=status_bar
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph2',
+                    children=[
+                        dcc.Graph(
+                            figure=status_pie
+                        )
+                    ]
+                )
+            ]
+        ),   
+
+        html.Div(
+            className='row3',
+            children=[
+                html.Div(
+                    className='graph1',
+                    children=[
+                        dcc.Graph(
+                            figure=activity_bar
+                        )
+                    ]
+                ),
+                html.Div(
+                    className='graph2',
+                    children=[
+                        dcc.Graph(
+                            figure=activity_pie
+                        )
+                    ]
+                )
+            ]
+        ),   
 
         html.Div(
             className='row3',
